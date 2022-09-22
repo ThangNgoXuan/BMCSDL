@@ -1,0 +1,28 @@
+.ant-layout-header {
+    height: 64px;
+    background-color: #fff;
+    border-bottom: 1px solid brown;
+    padding: 0 24px;
+}
+
+.header-account {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row-reverse;
+    cursor: pointer;
+}
+
+.ant-image {
+    width: 40px;
+    margin: 0 12px ;
+}
+
+.ant-image-image {
+    border-radius: 50%;
+}
+
+h5.ant-typography {
+    margin: 0;
+    font-weight: 600;
+}
