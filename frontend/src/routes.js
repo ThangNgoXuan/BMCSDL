@@ -3,23 +3,23 @@ import { FolderOutlined, HomeOutlined, IdcardOutlined, UserOutlined } from "@ant
 const listrouters = [
   {
     path: "/",
-    name: "Dashboard",
+    name: "Giám sát",
     icon: <HomeOutlined />,
   },
   {
-    path: "/user",
-    name: "Quản lí user",
-    icon: <UserOutlined />,
-  },
-  {
-    path: "/profile",
-    name: "Quản lí Profile",
+    path: "/accuracy",
+    name: "Xác thực hộ chiếu",
     icon: <FolderOutlined />,
   },
   {
-    path: "/quota",
-    name: "Quota",
+    path: "/browser",
+    name: "Xét duyệt hộ chiếu",
     icon: <IdcardOutlined />,
+  },
+  {
+    path: "/storage",
+    name: "Lưu trữ",
+    icon: <UserOutlined />,
   },
 ];
 

@@ -1,29 +1,19 @@
-import './App.css';
-import {Layout} from 'antd';
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
 
-import Header from './components/Header';
-import Sider from './components/Sider';
-import Profile from './pages/Profile';
-import { Route, Routes } from 'react-router-dom';
-import Quota from './pages/Quota';
-import User from './pages/User';
+import SignIn from "./pages/SignIn";
+import Application from "./pages/Application";
+import MainLayout from "./Layout";
 
 function App() {
-  const {Content} = Layout;
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider/>
-      <Layout>
-        <Header/>
-        <Content>
-          <Routes>
-            <Route path='/profile' element={<Profile/>}/>
-            <Route path='/quota' element={<Quota/>}/>
-            <Route path='/user' element={<User/>}/>
-          </Routes>
-        </Content>
-      </Layout>
-    </Layout>
+    <div className="App">
+      <Routes>
+        <Route exact path="/login" element={<SignIn/>}/>
+        <Route exact path="/application" element={<Application/>}/>
+        <Route path="*" element={<MainLayout/>}/>
+      </Routes>
+    </div>
   );
 }
 
