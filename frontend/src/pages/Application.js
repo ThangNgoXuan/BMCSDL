@@ -31,7 +31,7 @@ export default function Application() {
         onFinish={handleSubmit}
         form={form}
         initialValues={{
-            gender: "male",
+            sex: "male",
         }}
       >
         <Form.Item
@@ -45,6 +45,18 @@ export default function Application() {
           ]}
         >
           <Input className="Nhập Họ và Tên" />
+        </Form.Item>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng nhập Email",
+            },
+          ]}
+        >
+          <Input className="Nhập Email" />
         </Form.Item>
         <Form.Item
           label="Địa chỉ thường trú"
@@ -84,8 +96,10 @@ export default function Application() {
                 },
               ]}
             >
+              <Radio.Group>
                 <Radio value='male'>Nam</Radio>
                 <Radio value='female'>Nữ</Radio>
+              </Radio.Group>
             </Form.Item>
           </Col>
         </Row>
