@@ -1,16 +1,20 @@
-const oracledb = require('oracledb');
-
-cns = {
-    user: 'sys',
-    password: '123456',
-    connectString: '172.168.0.2/ORCLDB'
-}
+import oracledb from 'oracledb';
+global.USERNAME = '';
+global.PASSWORD = '';
 
 async function Open(sql, binds, autoCommit) {
+    console.log('glo: ' + USERNAME)
+    const cns = {
+        user: global.USERNAME || 'supper',
+        password: global.PASSWORD || 'supper',
+        connectString: 'localhost/orcl',
+    }
+
     let cnn = await oracledb.getConnection(cns);
-    let result = await cnn.execute(sql, binds, autoCommit);
+    let result = await cnn.execute(sql, binds, { autoCommit })
     cnn.release();
+    console.log(cnn._events)
     return result;
 }
 
-exports.Open = Open;
+export default Open;
