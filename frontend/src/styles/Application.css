@@ -3,5 +3,77 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 100px;
+    background-color: #ededed;
+}
+
+.p-application .header {
+    background: url('../assett/header.png') 0 0 no-repeat;
+    width: 1170px;
+    margin: 0 auto;
+    height: 160px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.p-application .form {
+    margin-top: 20px;
+    width: 1170px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    min-height: 60vh;
+}
+
+.p-application .container {
+    margin-top: 20px;
+    width: 1170px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    min-height: 60vh;
+}
+
+.p-application .link {
+    width: 48%;
+    font-size: 30px;
+    background-color: #276e44;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #fff;
+}
+
+.p-application .link p {
+    margin: 0;
+}
+
+.p-application .footer {
+    background-color: white;
+    width: 1170px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.p-application .footer p{
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.p-application .ant-btn.ant-btn-default {
+    background-color: #276e44 !important;
+    color: #fff !important;
 }

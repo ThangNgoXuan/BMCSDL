@@ -18,7 +18,7 @@ export default function MainLayout() {
         <Header />
         <Content>
           <Routes>
-            <Route exact path="/" element={<Dashboard />} />
+            <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/accuracy" element={<Accuracy />} />
             <Route exact path="/browser" element={<Browser />} />
             <Route exact path="/storage" element={<Storage />} />

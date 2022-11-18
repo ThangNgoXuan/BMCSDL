@@ -1,2 +1,2 @@
-global.USERNAME = 'supper';
-global.PASSWORD = '1';
+global.USERNAME = 'sys';
+global.PASSWORD = '123456';

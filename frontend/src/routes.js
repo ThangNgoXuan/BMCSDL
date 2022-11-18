@@ -1,8 +1,14 @@
-import { FolderOutlined, HomeOutlined, IdcardOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  FolderOutlined,
+  HomeOutlined,
+  IdcardOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 const listrouters = [
   {
-    path: "/",
+    path: "/dashboard",
     name: "Giám sát",
     icon: <HomeOutlined />,
   },
@@ -20,6 +26,10 @@ const listrouters = [
     path: "/storage",
     name: "Lưu trữ",
     icon: <UserOutlined />,
+  },
+  {
+    name: "Đăng xuất",
+    icon: <LogoutOutlined />,
   },
 ];
 

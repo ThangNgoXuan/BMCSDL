@@ -5,8 +5,8 @@ global.PASSWORD = '';
 async function Open(sql, binds, autoCommit) {
     console.log('glo: ' + USERNAME)
     const cns = {
-        user: global.USERNAME || 'supper',
-        password: global.PASSWORD || 'supper',
+        user: global.USERNAME || 'sys',
+        password: global.PASSWORD || '123456',
         connectString: 'localhost/orcl',
     }
 

@@ -1,10 +1,9 @@
 import { Button, Form, Input, notification, Typography } from "antd";
 import React from "react";
-import "../styles/SignIn.css";
-import ApplicationApi from "../api/applicationApi";
 import { Link } from "react-router-dom";
+import ApplicationApi from "../api/applicationApi";
 
-export default function SignIn() {
+export default function Search() {
   const { Title } = Typography;
   const { form } = Form.useForm();
   const handleSubmit = (data) => {
@@ -12,13 +11,13 @@ export default function SignIn() {
     ApplicationApi.createApplication(data)
       .then((res) => {
         notification.open({
-          message: "Đăng kí thành công",
+          message: "Tra cứu thành công",
         });
         form.resetFields();
       })
       .catch((err) => {
         notification.open({
-          message: "Đăng kí thất bại",
+          message: "Tra cứu thất bại",
         });
       });
     form.resetFields();
@@ -29,9 +28,12 @@ export default function SignIn() {
         <Link to="/">
           <Button>Trang chủ</Button>
         </Link>
+        <Link to="/login">
+          <Button>Đăng Nhập</Button>
+        </Link>
       </div>
       <div className="form">
-        <Title level={4}>Đăng nhập</Title>
+        <Title level={4}>Tra cứu thông tin gia hạn</Title>
         <Form
           style={{
             width: "300px",
@@ -42,32 +44,20 @@ export default function SignIn() {
           form={form}
         >
           <Form.Item
-            label="Tên đăng nhập"
-            name="userName"
+            label="Mã đăng kí"
+            name="id"
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên đăng nhập",
+                message: "Vui lòng nhập mã đăng kí",
               },
             ]}
           >
-            <Input className="Nhập tên đăng nhập" />
-          </Form.Item>
-          <Form.Item
-            label="Mật khẩu"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập mật khẩu",
-              },
-            ]}
-          >
-            <Input.Password className="Nhập mật khẩu" />
+            <Input className="Nhập mã đăng kí" />
           </Form.Item>
         </Form>
         <Button form="form" htmlType="submit">
-          Đăng Nhập
+          Tra cứu
         </Button>
       </div>
       <div className="footer">
