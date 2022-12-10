@@ -1,5 +1,8 @@
 import { Button, Table, Typography } from "antd";
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import userApi from "../api/userApi";
+import useFetch from "../hooks/useFetch";
 
 const columns = [
   {
@@ -41,6 +44,8 @@ const columns = [
   },
 ];
 
+
+
 const data = [
   {
     _id: 1,
@@ -53,6 +58,24 @@ const data = [
 ];
 
 export default function Accuracy() {
+
+  // const [loading, dataqq, _, fetch, refetch] = useFetch({}, 
+  //   userApi.getUser);
+
+  // useEffect(() => {
+  //   fetch({}, true);
+  //   /*eslint-disable-next-line */
+  // }, []);
+
+  axios.get('http://localhost:5000/user')
+  .then(function (response) {
+    console.log('qq',response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
   const { Title } = Typography;
   return (
     <div className="container">

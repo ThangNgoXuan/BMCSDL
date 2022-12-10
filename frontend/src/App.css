@@ -3,3 +3,7 @@
 .ant-layout-content {
   padding: 16px;
 }
+
+.App {
+  min-height: 100vh;
+}

@@ -34,6 +34,7 @@ export default function Application() {
           message: "Đăng kí thất bại",
         });
       });
+    form.resetFields();
   };
   return (
     <div className="p-application">
@@ -54,6 +55,8 @@ export default function Application() {
           form={form}
           initialValues={{
             sex: "male",
+            pants: "CFTOWN01",
+            dateofbirth: new Date(),
           }}
         >
           <Form.Item
@@ -109,8 +112,28 @@ export default function Application() {
               },
             ]}
           >
-            <Select>
-              <Option>qq</Option>
+            <Select >
+              <Option value='CFTOWN01'>Quận 1</Option>
+              <Option value='CFTOWN02'>Quận 2</Option>
+              <Option value='CFTOWN03'>Quận 3</Option>
+              <Option value='CFTOWN04'>Quận 4</Option>
+              <Option value='CFTOWN05'>Quận 5</Option>
+              <Option value='CFTOWN06'>Quận 6</Option>
+              <Option value='CFTOWN07'>Quận 7</Option>
+              <Option value='CFTOWN08'>Quận 8</Option>
+              <Option value='CFTOWN09'>Quận 9</Option>
+              <Option value='CFTOWN10'>Quận 10</Option>
+              <Option value='CFTOWN11'>Quận 11</Option>
+              <Option value='CFTOWN12'>Quận 12</Option>
+              <Option value='CFTOWNNHABE'>Quận Nhà Bè</Option>
+              <Option value='CFTOWNHOOCMON'>Quận Hooc Môn</Option>
+              <Option value='CFTOWNTHUDUC'>Quận Thủ Đức</Option>
+              <Option value='CFTOWNBINHTHANH'>Quận Bình Thạnh</Option>
+              <Option value='CFTOWNTANBINH'>Quận Bình Tân</Option>
+              <Option value='CFTOWNPHUNHUAN'>Quận Phú Nhuận</Option>
+              <Option value='CFTOWNTANBINH'>Quận Tân Bình</Option>
+              <Option value='CFTOWNTANPHU'>Quận Tân Phú</Option>
+              <Option value='CFTOWNCANGIO'>Quận Cần Giờ</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -137,7 +160,7 @@ export default function Application() {
                   },
                 ]}
               >
-                <DatePicker />
+                <DatePicker format={"DD/MM/YYYY"}/>
               </Form.Item>
             </Col>
             <Col span={12}>
