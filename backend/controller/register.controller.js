@@ -42,13 +42,13 @@ const registerController = {
     search: async (req,res) =>{
         try {
         const conn = await oracledb.getConnection({
-            user                : "hr",
-            password            : "hr",
+            user                : "PASSPORT",
+            password            : "PASSPORT",
             connectionString    : "192.168.182.1/orcl"
         });
-        const job_id = req.body.job_id;
+        const passcode = req.body.passcode;
         const result = await conn.execute(
-            "SELECT * FROM jobs WHERE job_id IN(:job_id)",[job_id]);
+            "SELECT * FROM passport.dsgiahanhochieu WHERE passcode = :1",[passcode]);
         res.status(200).send(result.rows);    
         } catch (error) {
             res.status(500).json(error);

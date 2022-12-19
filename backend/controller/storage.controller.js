@@ -11,7 +11,7 @@ const storageController = {
                 if(error){
                     res.status(403).json("Token is not valid")
                 }
-                if(RegExp("PASS").test(user)){
+                if(RegExp("BPLUUTRU").test(user)){
                     req.User = user;
                     req.Password = password;
                     next();
@@ -27,15 +27,113 @@ const storageController = {
         }
     },
     getStorage: async (req,res)=>{
-        accuracyController.verifyTokenStorage(req,res,()=>{
-            const conn = oracledb.getConnection({
-                user                : req.User,
-                password            : req.Password,
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
                 connectionString    : "192.168.182.1/orcl"
             });
-            res.status(200).send("login");
-        });
-    }
+            if(conn){
+                const result = await conn.execute(
+                    "SELECT * FROM passport.dsgiahanhochieu");
+                return res.status(200).send(result.rows);  
+            }
+            return res.status(404).send("wwrong");            
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
+    getPassport: async (req,res)=>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                const result = await conn.execute(
+                    "SELECT * FROM resident.tthochieu");
+                conn.close();
+                return res.status(200).send(result.rows);  
+            }
+            
+            return res.status(404).send("wwrong");            
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
+    searchDS: async (req,res)=>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                passcode = req.body.passcode
+                const result = await conn.execute(
+                    "SELECT * FROM passport.dsgiahanhochieu WHERE passcode = :1",
+                    [passcode]);
+                return res.status(200).send(result.rows);  
+            }
+            return res.status(404).send("wwrong");
+            
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
+    searchPassport: async (req,res)=>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                passcode = req.body.passcode
+                const result = await conn.execute(
+                    "SELECT * FROM resident.tthochieu WHERE passcode = :1",
+                    [passcode]);
+                return res.status(200).send(result.rows);  
+            }
+            return res.status(404).send("wwrong");           
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
+    updatePP: async (req,res)=>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                passcode = req.body.passcode;
+                expireddate =req.body.expireddate; 
+                const result = await conn.execute(
+                     "UPDATE resident.TTHOCHIEU SET expireddate= :1, status='Còn hạn sử dụng' where PASSCODE = :2", [expireddate, passcode], {autoCommit: true});
+                // const result = await conn.execute(
+                //     "UPDATE resident.TTHOCHIEU SET expireddate= '40/12/2024', status='Còn hạn sử dụng' where PASSCODE = 'HC20198972'",{autoCommit: true});
+                conn.close();
+                
+                return res.status(200).send(result); 
+            }
+            return res.status(404).send("wwrong");           
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
 }
 
 module.exports = storageController;

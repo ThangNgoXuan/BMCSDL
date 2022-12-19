@@ -78,15 +78,61 @@ const accuracyController = {
                 connectionString    : "192.168.182.1/orcl"
             });
             if(conn){
+                passcode = req.body.passcode;
+                cmt =req.body.cmt; 
                 const result = await conn.execute(
-                    "SELECT * FROM passport.dsgiahanhochieu");
-                return res.status(200).send(result.rows);  
+                    "UPDATE passport.dsgiahanhochieu SET IDENTITY='Đã xác thực', CMT = :1 where PASSCODE = :2",
+                    [cmt, passcode], {autoCommit: true});
+                return res.status(200).send(result);  
             }
             return res.status(404).send("wwrong");
             
         } catch (error) {
             return res.status(500).json(error);
         }         
+    },
+    searchRegister: async (req,res) =>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                const passcode = req.body.passcode;
+                const result = await conn.execute(
+                    "SELECT * FROM passport.dsgiahanhochieu WHERE passcode = :1",[passcode]);
+                return res.status(200).send(result.rows);
+            }
+            return res.status(404).send("wwrong"); 
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
+    searchInfo: async (req,res) =>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                const passcode = req.body.passcode;
+                const result = await conn.execute(
+                    "SELECT resident.ttcongdanhcm.CMND, resident.ttcongdanhcm.NAME, resident.ttcongdanhcm.birth, resident.ttcongdanhcm.sex,\
+                    resident.ttcongdanhcm.national, resident.ttcongdanhcm.address,resident.ttcongdanhcm.district, resident.ttcongdanhcm.begindatecmnd,\
+                    resident.tthochieu.passcode, resident.tthochieu.begindate, resident.tthochieu.expireddate, resident.tthochieu.status \
+                    FROM resident.tthochieu INNER JOIN resident.ttcongdanhcm ON resident.tthochieu.CMND = resident.ttcongdanhcm.CMND WHERE passcode = :1",[passcode]);
+                return res.status(200).send(result.rows);
+            }
+            return res.status(404).send("wwrong"); 
+        } catch (error) {
+            return res.status(500).json(error);
+        }
     },
 }
 
