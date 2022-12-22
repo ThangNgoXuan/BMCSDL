@@ -25,7 +25,7 @@ export default function Search() {
 
         }
         else{
-          const mes = kq[0][10] + "/" +kq[0][12]
+          const mes = kq[0][10] + "/" +kq[0][12] + "/"  +kq[0][13]
           alert(mes );
         }
         console.log("rưe", res)

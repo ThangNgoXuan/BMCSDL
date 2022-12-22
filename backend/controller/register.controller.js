@@ -30,7 +30,7 @@ const registerController = {
             // const idPerson= "req.body.idPersion";
             // const registerDate = "req.body.registerDate";
             const result = await conn.execute( 
-                "INSERT INTO dsgiahanhochieu VALUES (:registerDate, :name, :dayofbirth, :sex, :idPerson, :address, :quan, :phone, :email, :idPassport, 'Đang xác thực', '', '','')",
+                "INSERT INTO dsgiahanhochieu VALUES (:registerDate, :name, :dayofbirth, :sex, :idPerson, :address, :quan, :phone, :email, :idPassport, 'Đang xác thực', '', '','Chưa gia hạn')",
                 [registerDate, name, dayofbirth, sex, idPerson, address, quan, phone, email, idPassport],
                 {autoCommit: true});
             res.status(200).send("Register successfully");   

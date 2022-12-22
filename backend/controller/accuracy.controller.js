@@ -81,7 +81,7 @@ const accuracyController = {
                 passcode = req.body.passcode;
                 cmt =req.body.cmt; 
                 const result = await conn.execute(
-                    "UPDATE passport.dsgiahanhochieu SET IDENTITY='Đã xác thực', CMT = :1 where PASSCODE = :2",
+                    "UPDATE passport.dsgiahanhochieu SET IDENTITY='Đã xác thực',CONFIRM='Đang xét duyệt', CMT = :1 where PASSCODE = :2",
                     [cmt, passcode], {autoCommit: true});
                 return res.status(200).send(result);  
             }
