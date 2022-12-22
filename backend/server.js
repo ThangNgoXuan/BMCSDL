@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require("cookie-parser");
+const cors =require('cors');
 // const cors = require('cors');
 const app = express();
 require('dotenv').config();
@@ -12,7 +13,7 @@ app.listen(process.env.PORT, function(){
 app.get('/', function(req, res){
     res.send("helloword");
 })
-
+app.use(cors({credentials: true, origin: true}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

@@ -10,9 +10,10 @@ import {
   Select,
   Typography,
 } from "antd";
+import axios from "axios";
+import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
-import ApplicationApi from "../api/applicationApi";
 import "../styles/Application.css";
 
 export default function Application() {
@@ -22,18 +23,24 @@ export default function Application() {
 
   const handleSubmit = (data) => {
     console.log("data", data);
-    ApplicationApi.createApplication(data)
+    const newDate = new Date();
+    data.dayofbirth = moment(data.dayofbirth).format('DD/MM/YYYY');
+    data.registerDate = moment(newDate).format('DD/MM/YYYY');
+    axios
+      .post("http://localhost:8000/register/",  data )
       .then((res) => {
+        console.log(res.message)
         notification.open({
-          message: "Đăng kí thành công",
-        });
-        form.resetFields();
+          message: 'Đăng kí thành công',
+        })
       })
       .catch((err) => {
+        console.log(err)
         notification.open({
-          message: "Đăng kí thất bại",
-        });
-      });
+          message: 'Đăng kí thất bại',
+        })
+      })
+
     form.resetFields();
   };
   return (
@@ -55,7 +62,7 @@ export default function Application() {
           form={form}
           initialValues={{
             sex: "male",
-            pants: "CFTOWN01",
+            pants: "Quận 01",
             dateofbirth: new Date(),
           }}
         >
@@ -104,7 +111,7 @@ export default function Application() {
           </Row>
           <Form.Item
             label="Quận"
-            name="pants"
+            name="quan"
             rules={[
               {
                 required: true,
@@ -113,27 +120,27 @@ export default function Application() {
             ]}
           >
             <Select >
-              <Option value='CFTOWN01'>Quận 1</Option>
-              <Option value='CFTOWN02'>Quận 2</Option>
-              <Option value='CFTOWN03'>Quận 3</Option>
-              <Option value='CFTOWN04'>Quận 4</Option>
-              <Option value='CFTOWN05'>Quận 5</Option>
-              <Option value='CFTOWN06'>Quận 6</Option>
-              <Option value='CFTOWN07'>Quận 7</Option>
-              <Option value='CFTOWN08'>Quận 8</Option>
-              <Option value='CFTOWN09'>Quận 9</Option>
-              <Option value='CFTOWN10'>Quận 10</Option>
-              <Option value='CFTOWN11'>Quận 11</Option>
-              <Option value='CFTOWN12'>Quận 12</Option>
-              <Option value='CFTOWNNHABE'>Quận Nhà Bè</Option>
-              <Option value='CFTOWNHOOCMON'>Quận Hooc Môn</Option>
-              <Option value='CFTOWNTHUDUC'>Quận Thủ Đức</Option>
-              <Option value='CFTOWNBINHTHANH'>Quận Bình Thạnh</Option>
-              <Option value='CFTOWNTANBINH'>Quận Bình Tân</Option>
-              <Option value='CFTOWNPHUNHUAN'>Quận Phú Nhuận</Option>
-              <Option value='CFTOWNTANBINH'>Quận Tân Bình</Option>
-              <Option value='CFTOWNTANPHU'>Quận Tân Phú</Option>
-              <Option value='CFTOWNCANGIO'>Quận Cần Giờ</Option>
+              <Option value='Quận 1'>Quận 1</Option>
+              <Option value='Quận 2'>Quận 2</Option>
+              <Option value='Quận 3'>Quận 3</Option>
+              <Option value='Quận 4'>Quận 4</Option>
+              <Option value='Quận 5'>Quận 5</Option>
+              <Option value='Quận 6'>Quận 6</Option>
+              <Option value='Quận 7'>Quận 7</Option>
+              <Option value='Quận 8'>Quận 8</Option>
+              <Option value='Quận 9'>Quận 9</Option>
+              <Option value='Quận 10'>Quận 10</Option>
+              <Option value='Quận 11'>Quận 11</Option>
+              <Option value='Quận 12'>Quận 12</Option>
+              <Option value='Quận Nhà Bè'>Quận Nhà Bè</Option>
+              <Option value='Quận Hóc Môn'>Quận Hooc Môn</Option>
+              <Option value='Quận Thủ Đức'>Quận Thủ Đức</Option>
+              <Option value='Quận Bình Thạnh'>Quận Bình Thạnh</Option>
+              <Option value='Quận Tân Bình'>Quận Bình Tân</Option>
+              <Option value='Quận Phú Nhuận'>Quận Phú Nhuận</Option>
+              <Option value='Quận Tân Bình'>Quận Tân Bình</Option>
+              <Option value='Quận Tân Phú'>Quận Tân Phú</Option>
+              <Option value='Quận Cần Giờ'>Quận Cần Giờ</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -160,7 +167,7 @@ export default function Application() {
                   },
                 ]}
               >
-                <DatePicker format={"DD/MM/YYYY"}/>
+                <DatePicker format={"DD/MM/YYYY"} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -209,20 +216,6 @@ export default function Application() {
                 ]}
               >
                 <Input placeholder="Nhập số CMND/CCCD" />
-              </Form.Item>
-            </Col>
-            <Col span={11}>
-              <Form.Item
-                label="Số hộ khẩu"
-                name="idHousehold"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng số hộ khẩu",
-                  },
-                ]}
-              >
-                <Input placeholder="Nhập số hộ khẩu" />
               </Form.Item>
             </Col>
           </Row>

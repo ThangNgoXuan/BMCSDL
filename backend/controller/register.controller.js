@@ -46,7 +46,7 @@ const registerController = {
             password            : "PASSPORT",
             connectionString    : "192.168.182.1/orcl"
         });
-        const passcode = req.body.passcode;
+        const passcode = req.headers.passcode;
         const result = await conn.execute(
             "SELECT * FROM passport.dsgiahanhochieu WHERE passcode = :1",[passcode]);
         res.status(200).send(result.rows);    

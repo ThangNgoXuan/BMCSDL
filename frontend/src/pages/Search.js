@@ -1,26 +1,40 @@
 import { Button, Form, Input, notification, Typography } from "antd";
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
-import ApplicationApi from "../api/applicationApi";
 
 export default function Search() {
   const { Title } = Typography;
   const { form } = Form.useForm();
-  const handleSubmit = (data) => {
-    console.log("data", data);
-    ApplicationApi.createApplication(data)
-      .then((res) => {
-        notification.open({
-          message: "Tra cứu thành công",
-        });
-        form.resetFields();
+  const handleSubmit = (code) => {
+    console.log("data", code);
+    axios
+      .get("http://localhost:8000/register/", {
+        headers: {
+          passcode: code.passcode,
+        },
+      })
+      .then(function(res) {
+        const kq = res?.data;
+        console.log("qqqq",kq[0][10]);
+        if(kq[0][12] === null ) {
+          alert(kq[0][10] );
+          const mess = kq[0][10] + "/" +kq[0][11]
+          alert(mess );
+
+        }
+        else{
+          const mes = kq[0][10] + "/" +kq[0][12]
+          alert(mes );
+        }
+        console.log("rưe", res)
       })
       .catch((err) => {
+        console.log(err)
         notification.open({
-          message: "Tra cứu thất bại",
-        });
-      });
-    form.resetFields();
+          message: 'Tra cứu thất bại',
+        })
+      })
   };
   return (
     <div className="p-application">
@@ -44,8 +58,8 @@ export default function Search() {
           form={form}
         >
           <Form.Item
-            label="Mã đăng kí"
-            name="id"
+            label="Mã hộ chiếu"
+            name="passcode"
             rules={[
               {
                 required: true,

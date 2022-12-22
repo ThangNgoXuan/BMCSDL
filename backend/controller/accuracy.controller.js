@@ -39,7 +39,7 @@ const accuracyController = {
                     resident.ttcongdanhcm.national, resident.ttcongdanhcm.address,resident.ttcongdanhcm.district, resident.ttcongdanhcm.begindatecmnd,\
                     resident.tthochieu.passcode, resident.tthochieu.begindate, resident.tthochieu.expireddate, resident.tthochieu.status \
                     FROM resident.tthochieu INNER JOIN resident.ttcongdanhcm ON resident.tthochieu.CMND = resident.ttcongdanhcm.CMND");
-                //const result = await conn.execute("SELECT * FROM resident.ttcongdanhcm")
+                
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");

@@ -27,10 +27,6 @@ const listrouters = [
     name: "Lưu trữ",
     icon: <UserOutlined />,
   },
-  {
-    name: "Đăng xuất",
-    icon: <LogoutOutlined />,
-  },
 ];
 
 export default listrouters;

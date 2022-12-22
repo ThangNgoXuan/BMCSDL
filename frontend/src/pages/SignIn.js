@@ -2,27 +2,75 @@ import { Button, Form, Input, notification, Typography } from "antd";
 import React from "react";
 import "../styles/SignIn.css";
 import ApplicationApi from "../api/applicationApi";
-import { Link } from "react-router-dom";
+import userApi from "../api/userApi";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { loginSuccess } from "../slices/authSlice";
 
 export default function SignIn() {
   const { Title } = Typography;
   const { form } = Form.useForm();
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
   const handleSubmit = (data) => {
     console.log("data", data);
-    ApplicationApi.createApplication(data)
-      .then((res) => {
-        notification.open({
-          message: "Đăng kí thành công",
-        });
-        form.resetFields();
+    // userApi.postLogin(data)
+    //   .then((res) => {
+    //     notification.open({
+    //       message: "Đăng nhập thành công",
+    //     });
+    //     form.resetFields();
+    //   })
+    //   .catch((res) => {
+    //     notification.open({
+    //       message: "Đăng nhập thất bại",
+    //     });
+    //     form.resetFields();
+    //   })
+    // let params = {
+    //   user: data.User,
+    //   password: data.password,
+    // };
+    // userApi
+    //   .postLogin(params)
+    //   .then((res) => {
+    //     let {accessToken} = res;
+    //     dispatch({accessToken})
+    //   })
+    // userApi.postLogin(data).then(function (response) {
+    //   console.log("qqqq",response.data.accessToken);
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // });;
+    axios.post('http://localhost:8000/login/', data)
+      .then(function (response) {
+        console.log("qqqq", response.data.accessToken);
+        console.log(response.data)
+        let { accessToken, User: user } = response.data;
+        // let {accessToken} = res;
+        dispatch(loginSuccess({ accessToken, user }))
+
+        localStorage.setItem("token", `${response.data.accessToken}`)
+
+        if (RegExp("XTQUAN").test(response.data.User))
+          navigate('/accuracy')
+        else if (RegExp("BPGIAMSAT").test(response.data.User))
+          navigate('/dashboard')
+        else if (RegExp("BPXETDUYET").test(response.data.User))
+          navigate('/browser')
+        else if (RegExp("BPLUUTRU").test(response.data.User))
+          navigate('/storage')
+        else 
+          navigate('/login')
       })
-      .catch((err) => {
-        notification.open({
-          message: "Đăng kí thất bại",
-        });
+      .catch(function (error) {
+        console.log(error);
       });
-    form.resetFields();
   };
+
   return (
     <div className="p-application">
       <div className="header">
@@ -43,7 +91,7 @@ export default function SignIn() {
         >
           <Form.Item
             label="Tên đăng nhập"
-            name="userName"
+            name="user"
             rules={[
               {
                 required: true,
