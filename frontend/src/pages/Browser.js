@@ -111,7 +111,7 @@ export default function Browser() {
     axios
       .put("http://localhost:8000/approval/update/", {
         passcode: data.passcode,
-        confirm: "Không duyệt"
+        confirm: "Duyệt"
       },
         {
           headers: {
@@ -151,7 +151,7 @@ export default function Browser() {
       })
       .catch((err) => {
         notification.open({
-          message: 'Xác thực thất bại',
+          message: 'Duyệt không thành công',
         })
       })
   }
@@ -193,6 +193,7 @@ export default function Browser() {
   return (
     <div className='container'>
       <Table
+      scroll={{ x: 400 }}
         columns={columnsDangKy}
         dataSource={userRegister}
       />

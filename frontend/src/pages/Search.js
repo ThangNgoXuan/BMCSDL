@@ -1,7 +1,8 @@
-import { Button, Form, Input, notification, Typography } from "antd";
+import { Button, Form, Input, notification, Space, Typography } from "antd";
 import axios from "axios";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
 
 export default function Search() {
   const { Title } = Typography;
@@ -36,6 +37,9 @@ export default function Search() {
         })
       })
   };
+
+
+
   return (
     <div className="p-application">
       <div className="header">

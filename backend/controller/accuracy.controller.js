@@ -59,7 +59,7 @@ const accuracyController = {
             });
             if(conn){
                 const result = await conn.execute(
-                    "SELECT * FROM passport.dsgiahanhochieu");
+                    "SELECT * FROM passport.dsgiahanhochieu WHERE identity ='Đang xác thực' ");
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");

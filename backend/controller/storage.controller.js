@@ -37,7 +37,7 @@ const storageController = {
             });
             if(conn){
                 const result = await conn.execute(
-                    "SELECT * FROM passport.dsgiahanhochieu");
+                    "SELECT * FROM passport.dsgiahanhochieu where extend=''");
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");            
@@ -122,12 +122,34 @@ const storageController = {
                 passcode = req.body.passcode;
                 expireddate =req.body.expireddate; 
                 const result = await conn.execute(
-                     "UPDATE resident.TTHOCHIEU SET expireddate= :1, status='Còn hạn sử dụng' where PASSCODE = :2", [expireddate, passcode], {autoCommit: true});
-                // const result = await conn.execute(
-                //     "UPDATE resident.TTHOCHIEU SET expireddate= '40/12/2024', status='Còn hạn sử dụng' where PASSCODE = 'HC20198972'",{autoCommit: true});
+                    "UPDATE resident.TTHOCHIEU SET expireddate= :1, status='Còn hạn sử dụng' where PASSCODE = :2", [expireddate, passcode], {autoCommit: true});
+                // const result1 = await conn.execute(
+                //     "UPDATE passport.dsgiahanhochieu SET extend= 'Đã gia hạn' where PASSCODE = :1", [passcode], {autoCommit: true});
+               
                 conn.close();
                 
                 return res.status(200).send(result); 
+            }
+            return res.status(404).send("wwrong");           
+        } catch (error) {
+            return res.status(500).json(error);
+        }    
+    },
+    updatePP1: async (req,res)=>{
+        try {
+            const user =  req.User;
+            const password = req.Password;
+            const conn = await oracledb.getConnection({
+                user                : user,
+                password            : password,
+                connectionString    : "192.168.182.1/orcl"
+            });
+            if(conn){
+                passcode = req.body.passcode;
+                const result1 = await conn.execute(
+                    "UPDATE passport.dsgiahanhochieu SET extend= 'Đã gia hạn' where PASSCODE = :1",[passcode],{autoCommit: true}); //, [passcode], {autoCommit: true}
+                conn.close();        
+                return res.status(200).send(result1); 
             }
             return res.status(404).send("wwrong");           
         } catch (error) {

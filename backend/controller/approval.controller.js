@@ -35,7 +35,7 @@ const approvalController = {
             });
             if(conn){
                 const result = await conn.execute(
-                    "SELECT * FROM passport.dsgiahanhochieu");
+                    "SELECT * FROM passport.dsgiahanhochieu WHERE confirm=''");
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");

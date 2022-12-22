@@ -1,73 +1,12 @@
-import { Button, Form, Input, Modal, notification, Table, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, notification, Space, Table, Typography } from "antd";
 import axios from "axios";
-import React, { useEffect, useInsertionEffect, useState } from "react";
+import React, { useEffect, useInsertionEffect, useRef, useState } from "react";
+import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 
-const columnsCongDan = [
-  {
-    title: "CMND",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Tên",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Ngày cấp CMND",
-    dataIndex: "beginDateCMND",
-    key: "beginDateCMND",
-  },
-  {
-    title: "Ngày sinh",
-    dataIndex: "birth",
-    key: "birth",
-  },
-  {
-    title: "Giới tính",
-    dataIndex: "sex",
-    key: "sex",
-  },
-  {
-    title: "Quốc gia",
-    dataIndex: "national",
-    key: "national",
-  },
-  {
-    title: "Địa chỉ",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Quận",
-    dataIndex: "district",
-    key: "district",
-  },
-  {
-    title: "Passport",
-    dataIndex: "passcode",
-    key: "passcode",
-  },
-  {
-    title: "Ngày cấp",
-    dataIndex: "beginDate",
-    key: "beginDate",
-  },
-  {
-    title: "Ngày hết hạn",
-    dataIndex: "expiredDate",
-    key: "expiredDate",
-  },
-  {
-    title: "Tình trạng",
-    dataIndex: "status",
-    key: "status",
-  },
-
-];
 
 
 
@@ -81,78 +20,9 @@ export default function Accuracy() {
   const { form } = Form.useForm();
   const [passcode, setPasscode] = useState(''); 
 
-  const columnsDangKy = [
-    {
-      title: "Ngay dang ky",
-      dataIndex: "registerDate",
-      key: "registerDate",
-    },
-    {
-      title: "Tên",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Ngay sinh",
-      dataIndex: "birth",
-      key: "birth",
-    },
-    {
-      title: "Gioi tinh",
-      dataIndex: "sex",
-      key: "sex",
-    },
-    {
-      title: "CMND",
-      dataIndex: "cmnd",
-      key: "cmnd",
-    },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Quận",
-      dataIndex: "district",
-      key: "district",
-    },
-    {
-      title: "Passport",
-      dataIndex: "passcode",
-      key: "passcode",
-    },
-    {
-      title: "SDT",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Ma ho chieu",
-      dataIndex: "passcode",
-      key: "passcode",
-    },
-    {
-      title: "Tình trạng",
-      dataIndex: "identity",
-      key: "identity",
-    },
-    {
-      title: "Thao tác",
-      render: (record) => (
 
-        <div className="p-recruit_table_button">
-          <Button type="primary" onClick={() => {handleOpen(record)}}>Xác thực</Button>
-        </div>
-      ),
-    },
-  ]
-
+  
+  
 
 
   const token = localStorage.getItem("token");
@@ -272,15 +142,264 @@ export default function Accuracy() {
   }
 
   const { Title } = Typography;
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columnsCongDan = [
+    {
+      title: "Passport",
+      dataIndex: "passcode",
+      key: "passcode",
+      ...getColumnSearchProps('passcode'),
+    },
+    {
+      title: "CMND",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Ngày cấp CMND",
+      dataIndex: "beginDateCMND",
+      key: "beginDateCMND",
+    },
+    {
+      title: "Ngày sinh",
+      dataIndex: "birth",
+      key: "birth",
+    },
+    {
+      title: "Giới tính",
+      dataIndex: "sex",
+      key: "sex",
+    },
+    {
+      title: "Quốc gia",
+      dataIndex: "national",
+      key: "national",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Quận",
+      dataIndex: "district",
+      key: "district",
+    },
+
+    {
+      title: "Ngày cấp",
+      dataIndex: "beginDate",
+      key: "beginDate",
+    },
+    {
+      title: "Ngày hết hạn",
+      dataIndex: "expiredDate",
+      key: "expiredDate",
+    },
+    {
+      title: "Tình trạng",
+      dataIndex: "status",
+      key: "status",
+    },
+  
+  ];
+
+  const columnsDangKy = [
+    {
+      title: "Passport",
+      dataIndex: "passcode",
+      key: "passcode",
+      ...getColumnSearchProps('passcode'),
+    },
+    {
+      title: "Ngay dang ky",
+      dataIndex: "registerDate",
+      key: "registerDate",
+    },
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Ngay sinh",
+      dataIndex: "birth",
+      key: "birth",
+    },
+    {
+      title: "Gioi tinh",
+      dataIndex: "sex",
+      key: "sex",
+    },
+    {
+      title: "CMND",
+      dataIndex: "cmnd",
+      key: "cmnd",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Quận",
+      dataIndex: "district",
+      key: "district",
+    },
+
+    {
+      title: "SDT",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Ma ho chieu",
+      dataIndex: "passcode",
+      key: "passcode",
+    },
+    {
+      title: "Tình trạng",
+      dataIndex: "identity",
+      key: "identity",
+    },
+    {
+      title: "Thao tác",
+      render: (record) => (
+
+        <div className="p-recruit_table_button">
+          <Button type="primary" onClick={() => {handleOpen(record)}}>Xác thực</Button>
+        </div>
+      ),
+    },
+  ]
+
   return (
     <div className="container">
       <div>
         <Title level={4}>Hồ sơ đăng kí</Title>
-        <Table columns={columnsDangKy} dataSource={userRegister} />
+        <Table scroll={{ x: 400 }} columns={columnsDangKy} dataSource={userRegister} />
       </div>
       <div>
         <Title level={4}>Hồ sơ công dân</Title>
-        <Table columns={columnsCongDan} dataSource={userPP} />
+        <Table  scroll={{ x: 400 }} columns={columnsCongDan} dataSource={userPP} />
       </div>
       <Modal
         title="Xét thực"

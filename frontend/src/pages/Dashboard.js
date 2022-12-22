@@ -9,81 +9,32 @@ export default function Dashboard() {
 
   const columnsDangKy = [
     {
-      title: "Ngay dang ky",
-      dataIndex: "registerDate",
-      key: "registerDate",
+      title: "Thời gian chỉnh sửa",
+      dataIndex: "date",
+      key: "date",
     },
     {
-      title: "Tên",
+      title: "Bộ phận thực hiện",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Ngay sinh",
-      dataIndex: "birth",
-      key: "birth",
+      title: "Bảng được chỉnh sửa",
+      dataIndex: "table",
+      key: "table",
     },
     {
-      title: "Gioi tinh",
-      dataIndex: "sex",
-      key: "sex",
+      title: "Hành động",
+      dataIndex: "action",
+      key: "action",
     },
     {
-      title: "CMND",
-      dataIndex: "cmnd",
-      key: "cmnd",
+      title: "Nội dung hành động",
+      dataIndex: "des",
+      key: "des",
     },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Quận",
-      dataIndex: "district",
-      key: "district",
-    },
-    {
-      title: "Passport",
-      dataIndex: "passcode",
-      key: "passcode",
-    },
-    {
-      title: "SDT",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Ma ho chieu",
-      dataIndex: "passcode",
-      key: "passcode",
-    },
-    {
-      title: "Xét Duyệt",
-      dataIndex: "identity",
-      key: "identity",
-    },
-    {
-      title: "Ghi Chú",
-      dataIndex: "cmt",
-      key: "cmt",
-    },
-    {
-      title: "Xác thực",
-      dataIndex: "confirm",
-      key: "confirm",
-    }
+   
   ]
-
-  const token = localStorage.getItem("token");
-  console.log("token", token);
-
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
@@ -96,16 +47,11 @@ export default function Dashboard() {
         const dataBeforeRegister = response.data;
         console.log("adaaa", dataBeforeRegister);
         const fulldataRegister = dataBeforeRegister.map((item) => ({
-          registerDate: item[0],
-          name: item[1],
-          birth: item[2],
-          sex: item[3],
-          cmnd: item[4],
-          address: item[5],
-          district: item[6],
-          phone: item[7],
-          email: item[8],
-          passcode: item[9],
+          date: item[1],
+          name: item[2],
+          table: item[9],
+          action: item[15],
+          des: item[13],
           identity: item[10],
           cmt: item[11],
           confirm: item[12]
@@ -124,7 +70,7 @@ export default function Dashboard() {
       Giám sát
       <div>
         {/* <Title level={4}>Hồ sơ đăng kí</Title> */}
-        <Table columns={columnsDangKy} dataSource={userRegister} />
+        <Table scroll={{x: 400}} columns={columnsDangKy} dataSource={userRegister} />
       </div>
 
     </div>

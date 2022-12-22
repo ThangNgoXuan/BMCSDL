@@ -37,7 +37,7 @@ const monitoringController = {
             });
             if(conn){
                 const result = await conn.execute(
-                    "SELECT * FROM passport.dsgiahanhochieu");
+                    "SELECT * FROM DBA_FGA_AUDIT_TRAIL");
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");

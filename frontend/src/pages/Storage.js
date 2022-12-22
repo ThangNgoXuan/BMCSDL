@@ -1,52 +1,165 @@
-import { Button, Table, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Highlighter from "react-highlight-words";
 
-const columns = [
-  {
-    title: "Ngay dang ky",
-    dataIndex: "registerDate",
-    key: "registerDate",
-  },
-  {
-    title: "Passport",
-    dataIndex: "passcode",
-    key: "passcode",
-  },
 
-  {
-    title: "Ma ho chieu",
-    dataIndex: "passcode",
-    key: "passcode",
-  },
-  {
-    title: "Xác thực",
-    dataIndex: "identity",
-    key: "identity",
-  },
-  {
-    title: "Xét duyệt",
-    dataIndex: "confirm",
-    key: "confirm",
-  },
-  {
-    title: "Ghi chú ",
-    dataIndex: "cmt",
-    key: "cmt",
-  },
-]
 
 
 export default function Storage() {
   const [dataStore, setDateStore] = useState();
   const [dataReg, setDateReg] = useState();
 
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columns = [
+    {
+      title: "Ngay dang ky",
+      dataIndex: "registerDate",
+      key: "registerDate",
+    },
+    {
+      title: "Passport",
+      dataIndex: "passcode",
+      key: "passcode",
+      ...getColumnSearchProps('passcode'),
+    },
+  
+    {
+      title: "Ma ho chieu",
+      dataIndex: "passcode",
+      key: "passcode",
+    },
+    {
+      title: "Xác thực",
+      dataIndex: "identity",
+      key: "identity",
+    },
+    {
+      title: "Xét duyệt",
+      dataIndex: "confirm",
+      key: "confirm",
+    },
+    {
+      title: "Ghi chú ",
+      dataIndex: "cmt",
+      key: "cmt",
+    },
+  ]
   const columnsPP = [
     {
       title: "Mã hộ chiếu",
       dataIndex: "passcode",
       key: "passcode",
+      ...getColumnSearchProps('passcode'),
     },
     {
       title: "Ngày đăng kí",
@@ -86,6 +199,21 @@ export default function Storage() {
     axios
       .put("http://localhost:8000/storage/update/", {
         expireddate: c,
+        passcode: data.passcode,
+      }, {
+        headers: {
+          token: token,
+        },
+      })
+      .then(function (response) {
+        console.log("qq", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      axios
+      .put("http://localhost:8000/storage/update1", {
         passcode: data.passcode,
       }, {
         headers: {
@@ -159,11 +287,11 @@ export default function Storage() {
     <div className="container">
       <div>
         <Title level={4}>Hồ sơ đăng kí</Title>
-        <Table columns={columns} dataSource={dataReg} />
+        <Table scroll={{ x: 400 }} columns={columns} dataSource={dataReg} />
       </div>
       <div>
         <Title level={4}>Hồ sơ hộ chiếu</Title>
-        <Table columns={columnsPP} dataSource={dataStore} />
+        <Table scroll={{ x: 400 }} columns={columnsPP} dataSource={dataStore} />
       </div>
     </div>
   );
