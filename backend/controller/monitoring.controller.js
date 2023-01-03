@@ -37,7 +37,7 @@ const monitoringController = {
             });
             if(conn){
                 const result = await conn.execute(
-                    "SELECT * FROM DBA_FGA_AUDIT_TRAIL");
+                    "SELECT * FROM DBA_FGA_AUDIT_TRAIL ORDER BY timestamp DESC");
                 return res.status(200).send(result.rows);  
             }
             return res.status(404).send("wwrong");

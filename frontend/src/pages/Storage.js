@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table, Typography } from "antd";
+import { Button, Form, Input, Modal, notification, Space, Table, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
@@ -11,6 +11,8 @@ import Highlighter from "react-highlight-words";
 export default function Storage() {
   const [dataStore, setDateStore] = useState();
   const [dataReg, setDateReg] = useState();
+  const [open, setOpen] = useState(false);
+  const [passCode, setPassCode] = useState("");
 
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -186,11 +188,17 @@ export default function Storage() {
       title: "Thao tác",
       render: (record) => (
         <div className="p-recruit_table_button">
-          <Button type="primary" onClick={() => { handleGH(record) }} >Gia hạn</Button>
+          <Button type="primary" onClick={() => { handleOpen(record) }} >Gia hạn</Button>
         </div>
       ),
     },
   ];
+
+  const handleOpen = (data) => {
+    setOpen(true)
+    console.log("recode", data)
+    setPassCode(data.passcode)
+  }
 
 
   const handleGH = (data) => {
@@ -282,6 +290,54 @@ export default function Storage() {
       });
   }, []);
 
+  const handleClose = () => {
+    setOpen(false)
+    setPassCode('')
+  }
+
+  const handleUpdate = (data) => {
+    console.log("day", data)
+    const token = localStorage.getItem("token");
+    axios
+      .put("http://localhost:8000/storage/update/", {
+        expireddate: data.date,
+        passcode: passCode,
+      }, {
+        headers: {
+          token: token,
+        },
+      })
+      .then(function (response) {
+        console.log("qq", response);
+        notification.open({
+          message: 'Gia hạn thành công',
+        })
+        handleClose();
+      })
+      .catch(function (error) {
+        console.log(error);
+        notification.open({
+          message: 'Gia hạn thất bại',
+        })
+      });
+
+      axios
+      .put("http://localhost:8000/storage/update1", {
+        passcode: passCode,
+      }, {
+        headers: {
+          token: token,
+        },
+      })
+      .then(function (response) {
+        console.log("qq", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const { form } = Form.useForm();
   const { Title } = Typography;
   return (
     <div className="container">
@@ -293,6 +349,25 @@ export default function Storage() {
         <Title level={4}>Hồ sơ hộ chiếu</Title>
         <Table scroll={{ x: 400 }} columns={columnsPP} dataSource={dataStore} />
       </div>
+      <Modal
+        title="Lưu trữ"
+        open={open}
+        onCancel={handleClose}
+        footer={[
+          <>
+            <Button size="large" htmlType="submit" form="form">Gia hạn</Button>
+          
+          </>
+        ]}
+      >
+        <Form onFinish={handleUpdate} form={form} id="form">
+          <Form.Item
+            label="Ngày hết hạn"
+            name="date">
+            <Input placeholder="DD/MM/YYYY"/>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
